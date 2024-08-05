@@ -1,0 +1,20 @@
+NXP Software Content Register
+
+Package:                    imx-lane-detection
+Version:                    1.0.1
+Date:                       July 2024
+Outgoing License:           Apache-2.0
+License File:               LICENSE.txt
+Package Category:           Example application
+Type of content:            Source code, recipes and scripts
+Description and comments:   ML lane detection demo application for detect the lane line and road object(car,person,etc.) on the road.
+Release Location:           https://github.com/nxp-imx-support/imx-lane-detection
+Origin:                     NXP (Apache-2.0)
+                            iwatake2222 (Apache-2.0) https://github.com/iwatake2222/play_with_tflite/blob/master/pj_tflite_lane_ultra-fast-lane-detection/image_processor/lane_engine.cpp
+                            Ultra-Fast-Lane-Detection (MIT) https://github.com/cfzd/Ultra-Fast-Lane-Detection
+                            Mobilenet_v2_ssd (Apache-2.0) https://github.com/google-coral/edgetpu/blob/master/test_data/ssd_mobilenet_v2_coco_quant_postprocess.tflite
+                            lane_detection.mp4 https://www.youtube.com/watch?v=8LkD0MT8wmE
+                            
+
+
+                                                       
