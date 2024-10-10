@@ -22,10 +22,10 @@ include_directories(${CAIRO_INCLUDE_DIRS} ${GSTREAMER_INCLUDE_DIRS})
 link_directories(${CAIRO_LIBRARY_DIRS} ${GSTREAMER_LIBRARY_DIRS})
 
 # Add source files
-add_executable(lane_detection lane_detection.cpp)
+add_executable(imx-lane-detection lane_detection.cpp)
 
 # Link OpenCV library with the library found by pkg-config
-target_link_libraries(lane_detection
+target_link_libraries(imx-lane-detection
   ${CAIRO_LIBRARIES}
   ${GSTREAMER_LIBRARIES}
   opencv_objdetect

@@ -736,8 +736,8 @@ void printHelp() {
     std::cout << "Usage: " << "lane_detection aplication example" << " [options]\n";
     std::cout << "Options:\n";
     std::cout << "  -h, Display this help and exit\n";
-    std::cout << "  -s, set video source or camera source default by video source (eg: -s camera or -s video)\n";
-    std::cout << "  -v, The video name. Must set video name if use your video (eg: -s video -v lane_detection.mp4)\n";
+    std::cout << "  -s, set video source or camera source default by video source (eg: -s camera or -s /dev/videoX , X is your camera number)\n";
+    std::cout << "  -v, The video name. Must set video name if use your video (eg: -s video -v lane_detection.mov)\n";
     std::cout << "  -c, The centor pixel of the car default by 320.0 (eg: -c 320.0)\n";
     std::cout << "  -l, The length of the car default by 280.0 (eg: -l 280.0)\n";
 }
@@ -752,6 +752,10 @@ main (int argc, char **argv)
   {  
     static struct option long_options[] = {
         {"help", no_argument, nullptr, 'h'},
+        {"car-center", required_argument, 0, 'c'},
+        {"source", required_argument, 0, 's'},
+        {"video-name", required_argument, 0, 'v'},
+        {"car-length", required_argument, 0, 'l'},
         {nullptr, 0, nullptr, 0}};
 
     /* getopt_long stores the option index here. */
@@ -822,60 +826,59 @@ main (int argc, char **argv)
   hostname = get_hostname();
 
   if (!hostname.compare("imx93evk")){
-    if (!s.demo_source.compare("camera")){
-      str_pipeline = 
-        g_strdup_printf
-        ("v4l2src name=cam_src device=/dev/video0 ! imxvideoconvert_pxp ! video/x-raw,width=640, height=480, framerate=15/1,format=BGRx ! "
-          "tee name=t0 t0. ! imxvideoconvert_pxp ! video/x-raw, width=800, height=288 ! queue max-size-buffers=2 leaky=2 ! videoconvert ! video/x-raw,format=RGB !"
-          " tensor_converter ! tensor_transform mode=arithmetic option=typecast:float32,mul:0.01735207,add:-2.017699 ! tensor_filter framework=tensorflow-lite model=\"./models/model_integer_quant_vela.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libethosu_delegate.so "
-          " silent=FALSE name=tensor_filter0 latency=1 ! tensor_sink name=tensor_sink0 t0. ! " 
-          "tee name=t1  t1. ! imxvideoconvert_pxp ! video/x-raw, width=300, height=300 ! queue max-size-buffers=2 leaky=2 ! videoconvert ! video/x-raw,format=RGB !"
-          " tensor_converter ! tensor_filter framework=tensorflow-lite model=\"./models/mobilenet_ssd_v2_coco_quant_postprocess_vela.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libethosu_delegate.so "
-          " silent=FALSE name=tensor_filter1 latency=1 ! tensor_sink name=tensor_sink1 t1. ! "
-          "imxvideoconvert_pxp ! cairooverlay name=tensor_res ! queue max-size-buffers=2 leaky=2 ! waylandsink "
-          );    
-    }
-    else{
+    if (!s.demo_source.compare("video")){
       str_pipeline =
         g_strdup_printf
           ("filesrc location=%s ! qtdemux ! avdec_h264 ! imxvideoconvert_pxp ! video/x-raw,width=640, height=480 ! "
           "tee name=t0 t0. ! imxvideoconvert_pxp ! video/x-raw, width=800, height=288 ! queue max-size-buffers=2 leaky=2 ! videoconvert ! video/x-raw,format=RGB !"
           " tensor_converter ! tensor_transform mode=arithmetic option=typecast:float32,mul:0.01735207,add:-2.017699 ! tensor_filter framework=tensorflow-lite model=\"./models/model_integer_quant_vela.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libethosu_delegate.so "
-          " silent=FALSE name=tensor_filter0 latency=1 ! tensor_sink name=tensor_sink0 t0. ! " 
+          " silent=FALSE name=tensor_filter0 latency=1 ! tensor_sink name=tensor_sink0 t0. ! "
           "tee name=t1  t1. ! imxvideoconvert_pxp ! video/x-raw, width=300, height=300 ! queue max-size-buffers=2 leaky=2 ! videoconvert ! video/x-raw,format=RGB !  "
           " tensor_converter ! tensor_filter framework=tensorflow-lite model=\"./models/mobilenet_ssd_v2_coco_quant_postprocess_vela.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libethosu_delegate.so "
           " silent=FALSE name=tensor_filter1 latency=1 ! tensor_sink name=tensor_sink1 t1. ! "
           "imxvideoconvert_pxp ! cairooverlay name=tensor_res ! queue max-size-buffers=2 leaky=2 ! waylandsink ", s.video_name.c_str()
-
-          );        
+          );
+    }
+    else{
+      str_pipeline =
+        g_strdup_printf
+        ("v4l2src name=cam_src device=%s ! imxvideoconvert_pxp ! video/x-raw,width=640, height=480, framerate=15/1,format=BGRx ! "
+          "tee name=t0 t0. ! imxvideoconvert_pxp ! video/x-raw, width=800, height=288 ! queue max-size-buffers=2 leaky=2 ! videoconvert ! video/x-raw,format=RGB !"
+          " tensor_converter ! tensor_transform mode=arithmetic option=typecast:float32,mul:0.01735207,add:-2.017699 ! tensor_filter framework=tensorflow-lite model=\"./models/model_integer_quant_vela.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libethosu_delegate.so "
+          " silent=FALSE name=tensor_filter0 latency=1 ! tensor_sink name=tensor_sink0 t0. ! "
+          "tee name=t1  t1. ! imxvideoconvert_pxp ! video/x-raw, width=300, height=300 ! queue max-size-buffers=2 leaky=2 ! videoconvert ! video/x-raw,format=RGB !"
+          " tensor_converter ! tensor_filter framework=tensorflow-lite model=\"./models/mobilenet_ssd_v2_coco_quant_postprocess_vela.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libethosu_delegate.so "
+          " silent=FALSE name=tensor_filter1 latency=1 ! tensor_sink name=tensor_sink1 t1. ! "
+          "imxvideoconvert_pxp ! cairooverlay name=tensor_res ! queue max-size-buffers=2 leaky=2 ! waylandsink ",s.demo_source.c_str()
+          );
     }    
   }  
   else if (!hostname.compare("imx8mpevk")){
-    if (!s.demo_source.compare("camera")){
-      str_pipeline = 
-        g_strdup_printf
-        ("v4l2src name=cam_src device=/dev/video3 ! imxvideoconvert_g2d ! video/x-raw,width=640, height=480, framerate=30/1,format=BGRx ! "
-          "tee name=t0 t0. ! imxvideoconvert_g2d ! video/x-raw, width=800, height=288 ! queue max-size-buffers=2 leaky=2 ! videoconvert ! video/x-raw,format=RGB !"
-          " tensor_converter ! tensor_transform mode=arithmetic option=typecast:float32,mul:0.01735207,add:-2.017699 ! tensor_filter framework=tensorflow-lite model=\"./models/model_integer_quant.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libvx_delegate.so "
-          " silent=FALSE name=tensor_filter0 latency=1 ! tensor_sink name=tensor_sink0 t0. ! " 
-          "tee name=t1  t1. ! imxvideoconvert_g2d ! video/x-raw, width=300, height=300 ! queue max-size-buffers=2 leaky=2 ! videoconvert ! video/x-raw,format=RGB !"
-          " tensor_converter ! tensor_filter framework=tensorflow-lite model=\"./models/mobilenet_ssd_v2_coco_quant_postprocess.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libvx_delegate.so "
-          " silent=FALSE name=tensor_filter1 latency=1 ! tensor_sink name=tensor_sink1 t1. ! "
-          "imxvideoconvert_g2d ! cairooverlay name=tensor_res ! queue max-size-buffers=2 leaky=2 ! waylandsink "
-          );    
-    }
-    else{
+    if (!s.demo_source.compare("video")){
       str_pipeline =
         g_strdup_printf
           ("filesrc location=%s ! qtdemux ! h264parse ! vpudec ! imxvideoconvert_g2d ! video/x-raw,width=640, height=480 ! "
           "tee name=t0 t0. ! imxvideoconvert_g2d ! video/x-raw, width=800, height=288 ! queue max-size-buffers=2 leaky=2 ! videoconvert ! video/x-raw,format=RGB !"
            " tensor_converter ! tensor_transform mode=arithmetic option=typecast:float32,mul:0.01735207,add:-2.017699 ! tensor_filter framework=tensorflow-lite model=\"./models/model_integer_quant.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libvx_delegate.so "
-          " silent=FALSE name=tensor_filter0 latency=1 ! tensor_sink name=tensor_sink0 t0. ! " 
+          " silent=FALSE name=tensor_filter0 latency=1 ! tensor_sink name=tensor_sink0 t0. ! "
           "tee name=t1  t1. ! imxvideoconvert_g2d ! video/x-raw, width=300, height=300 ! queue max-size-buffers=2 leaky=2 ! videoconvert ! video/x-raw,format=RGB !  "
           " tensor_converter ! tensor_filter framework=tensorflow-lite model=\"./models/mobilenet_ssd_v2_coco_quant_postprocess.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libvx_delegate.so "
           " silent=FALSE name=tensor_filter1 latency=1 ! tensor_sink name=tensor_sink1 t1. ! "
           "imxvideoconvert_g2d ! cairooverlay name=tensor_res ! queue max-size-buffers=2 leaky=2 ! waylandsink", s.video_name.c_str()
-          );        
+          );
+    }
+    else{
+      str_pipeline =
+        g_strdup_printf
+        ("v4l2src name=cam_src device=%s ! imxvideoconvert_g2d ! video/x-raw,width=640, height=480, framerate=30/1,format=BGRx ! "
+          "tee name=t0 t0. ! imxvideoconvert_g2d ! video/x-raw, width=800, height=288 ! queue max-size-buffers=2 leaky=2 ! videoconvert ! video/x-raw,format=RGB !"
+          " tensor_converter ! tensor_transform mode=arithmetic option=typecast:float32,mul:0.01735207,add:-2.017699 ! tensor_filter framework=tensorflow-lite model=\"./models/model_integer_quant.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libvx_delegate.so "
+          " silent=FALSE name=tensor_filter0 latency=1 ! tensor_sink name=tensor_sink0 t0. ! "
+          "tee name=t1  t1. ! imxvideoconvert_g2d ! video/x-raw, width=300, height=300 ! queue max-size-buffers=2 leaky=2 ! videoconvert ! video/x-raw,format=RGB !"
+          " tensor_converter ! tensor_filter framework=tensorflow-lite model=\"./models/mobilenet_ssd_v2_coco_quant_postprocess.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libvx_delegate.so "
+          " silent=FALSE name=tensor_filter1 latency=1 ! tensor_sink name=tensor_sink1 t1. ! "
+          "imxvideoconvert_g2d ! cairooverlay name=tensor_res ! queue max-size-buffers=2 leaky=2 ! waylandsink ",s.demo_source.c_str()
+          );
     }  
   }
   else{
