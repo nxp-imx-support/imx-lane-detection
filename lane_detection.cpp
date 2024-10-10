@@ -831,10 +831,10 @@ main (int argc, char **argv)
         g_strdup_printf
           ("filesrc location=%s ! qtdemux ! avdec_h264 ! imxvideoconvert_pxp ! video/x-raw,width=640, height=480 ! "
           "tee name=t0 t0. ! imxvideoconvert_pxp ! video/x-raw, width=800, height=288 ! queue max-size-buffers=2 leaky=2 ! videoconvert ! video/x-raw,format=RGB !"
-          " tensor_converter ! tensor_transform mode=arithmetic option=typecast:float32,mul:0.01735207,add:-2.017699 ! tensor_filter framework=tensorflow-lite model=\"./models/model_integer_quant_vela.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libethosu_delegate.so "
+          " tensor_converter ! tensor_transform mode=arithmetic option=typecast:float32,mul:0.01735207,add:-2.017699 ! tensor_filter framework=tensorflow-lite model=\"/opt/gopoint-apps/downloads/lane_detection_vela.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libethosu_delegate.so "
           " silent=FALSE name=tensor_filter0 latency=1 ! tensor_sink name=tensor_sink0 t0. ! "
           "tee name=t1  t1. ! imxvideoconvert_pxp ! video/x-raw, width=300, height=300 ! queue max-size-buffers=2 leaky=2 ! videoconvert ! video/x-raw,format=RGB !  "
-          " tensor_converter ! tensor_filter framework=tensorflow-lite model=\"./models/mobilenet_ssd_v2_coco_quant_postprocess_vela.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libethosu_delegate.so "
+          " tensor_converter ! tensor_filter framework=tensorflow-lite model=\"/opt/gopoint-apps/downloads/mobilenet_ssd_v2_coco_quant_postprocess_vela.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libethosu_delegate.so "
           " silent=FALSE name=tensor_filter1 latency=1 ! tensor_sink name=tensor_sink1 t1. ! "
           "imxvideoconvert_pxp ! cairooverlay name=tensor_res ! queue max-size-buffers=2 leaky=2 ! waylandsink ", s.video_name.c_str()
           );
@@ -844,10 +844,10 @@ main (int argc, char **argv)
         g_strdup_printf
         ("v4l2src name=cam_src device=%s ! imxvideoconvert_pxp ! video/x-raw,width=640, height=480, framerate=15/1,format=BGRx ! "
           "tee name=t0 t0. ! imxvideoconvert_pxp ! video/x-raw, width=800, height=288 ! queue max-size-buffers=2 leaky=2 ! videoconvert ! video/x-raw,format=RGB !"
-          " tensor_converter ! tensor_transform mode=arithmetic option=typecast:float32,mul:0.01735207,add:-2.017699 ! tensor_filter framework=tensorflow-lite model=\"./models/model_integer_quant_vela.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libethosu_delegate.so "
+          " tensor_converter ! tensor_transform mode=arithmetic option=typecast:float32,mul:0.01735207,add:-2.017699 ! tensor_filter framework=tensorflow-lite model=\"/opt/gopoint-apps/downloads/lane_detection_vela.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libethosu_delegate.so "
           " silent=FALSE name=tensor_filter0 latency=1 ! tensor_sink name=tensor_sink0 t0. ! "
           "tee name=t1  t1. ! imxvideoconvert_pxp ! video/x-raw, width=300, height=300 ! queue max-size-buffers=2 leaky=2 ! videoconvert ! video/x-raw,format=RGB !"
-          " tensor_converter ! tensor_filter framework=tensorflow-lite model=\"./models/mobilenet_ssd_v2_coco_quant_postprocess_vela.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libethosu_delegate.so "
+          " tensor_converter ! tensor_filter framework=tensorflow-lite model=\"./opt/gopoint-apps/downloads/mobilenet_ssd_v2_coco_quant_postprocess_vela.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libethosu_delegate.so "
           " silent=FALSE name=tensor_filter1 latency=1 ! tensor_sink name=tensor_sink1 t1. ! "
           "imxvideoconvert_pxp ! cairooverlay name=tensor_res ! queue max-size-buffers=2 leaky=2 ! waylandsink ",s.demo_source.c_str()
           );
@@ -859,10 +859,10 @@ main (int argc, char **argv)
         g_strdup_printf
           ("filesrc location=%s ! qtdemux ! h264parse ! vpudec ! imxvideoconvert_g2d ! video/x-raw,width=640, height=480 ! "
           "tee name=t0 t0. ! imxvideoconvert_g2d ! video/x-raw, width=800, height=288 ! queue max-size-buffers=2 leaky=2 ! videoconvert ! video/x-raw,format=RGB !"
-           " tensor_converter ! tensor_transform mode=arithmetic option=typecast:float32,mul:0.01735207,add:-2.017699 ! tensor_filter framework=tensorflow-lite model=\"./models/model_integer_quant.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libvx_delegate.so "
+           " tensor_converter ! tensor_transform mode=arithmetic option=typecast:float32,mul:0.01735207,add:-2.017699 ! tensor_filter framework=tensorflow-lite model=\"/opt/gopoint-apps/downloads/lane_detection.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libvx_delegate.so "
           " silent=FALSE name=tensor_filter0 latency=1 ! tensor_sink name=tensor_sink0 t0. ! "
           "tee name=t1  t1. ! imxvideoconvert_g2d ! video/x-raw, width=300, height=300 ! queue max-size-buffers=2 leaky=2 ! videoconvert ! video/x-raw,format=RGB !  "
-          " tensor_converter ! tensor_filter framework=tensorflow-lite model=\"./models/mobilenet_ssd_v2_coco_quant_postprocess.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libvx_delegate.so "
+          " tensor_converter ! tensor_filter framework=tensorflow-lite model=\"/opt/gopoint-apps/downloads/mobilenet_ssd_v2_coco_quant_postprocess.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libvx_delegate.so "
           " silent=FALSE name=tensor_filter1 latency=1 ! tensor_sink name=tensor_sink1 t1. ! "
           "imxvideoconvert_g2d ! cairooverlay name=tensor_res ! queue max-size-buffers=2 leaky=2 ! waylandsink", s.video_name.c_str()
           );
@@ -872,10 +872,10 @@ main (int argc, char **argv)
         g_strdup_printf
         ("v4l2src name=cam_src device=%s ! imxvideoconvert_g2d ! video/x-raw,width=640, height=480, framerate=30/1,format=BGRx ! "
           "tee name=t0 t0. ! imxvideoconvert_g2d ! video/x-raw, width=800, height=288 ! queue max-size-buffers=2 leaky=2 ! videoconvert ! video/x-raw,format=RGB !"
-          " tensor_converter ! tensor_transform mode=arithmetic option=typecast:float32,mul:0.01735207,add:-2.017699 ! tensor_filter framework=tensorflow-lite model=\"./models/model_integer_quant.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libvx_delegate.so "
+          " tensor_converter ! tensor_transform mode=arithmetic option=typecast:float32,mul:0.01735207,add:-2.017699 ! tensor_filter framework=tensorflow-lite model=\"/opt/gopoint-apps/downloads/lane_detection.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libvx_delegate.so "
           " silent=FALSE name=tensor_filter0 latency=1 ! tensor_sink name=tensor_sink0 t0. ! "
           "tee name=t1  t1. ! imxvideoconvert_g2d ! video/x-raw, width=300, height=300 ! queue max-size-buffers=2 leaky=2 ! videoconvert ! video/x-raw,format=RGB !"
-          " tensor_converter ! tensor_filter framework=tensorflow-lite model=\"./models/mobilenet_ssd_v2_coco_quant_postprocess.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libvx_delegate.so "
+          " tensor_converter ! tensor_filter framework=tensorflow-lite model=\"/opt/gopoint-apps/downloads/mobilenet_ssd_v2_coco_quant_postprocess.tflite\" accelerator=true:npu custom=Delegate:External,ExtDelegateLib:libvx_delegate.so "
           " silent=FALSE name=tensor_filter1 latency=1 ! tensor_sink name=tensor_sink1 t1. ! "
           "imxvideoconvert_g2d ! cairooverlay name=tensor_res ! queue max-size-buffers=2 leaky=2 ! waylandsink ",s.demo_source.c_str()
           );
