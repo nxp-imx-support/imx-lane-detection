@@ -204,7 +204,7 @@ _set_window_title (const gchar * name, const gchar * title)
 
 // The demo setting init
 struct Settings {
-  string video_name = "lane_detection.mov";
+  string video_name = "/opt/gopoint-apps/downloads/lane_detection.mov";
   string demo_source = "video";
   string car_centor = "320.0";
   string car_length = "280.0";
