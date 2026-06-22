@@ -1,0 +1,81 @@
+{
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "spdxVersion": "SPDX-2.3",
+  "creationInfo": {
+    "created": "2026-06-22T08:03:05Z",
+    "creators": [
+      "Organization: COMPANY NAME",
+      "Tool: Black Duck Hub - 2026.4.2"
+    ],
+    "licenseListVersion": "3.28"
+  },
+  "name": "imx-lane-detection-v1.0_release_L6.6.23_2.0.0",
+  "dataLicense": "CC0-1.0",
+  "documentNamespace": "https://blackducksoftware.github.io/spdx/imx-lane-detection-8ff711d4-4936-4ea6-b00a-59fe21981eb8",
+  "packages": [
+    {
+      "SPDXID": "SPDXRef-package-7b021e62-0d48-45b8-b00b-182b8aac6c24",
+      "downloadLocation": "https://github.com/nxp-imx-support/imx-lane-detection",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "7b021e62-0d48-45b8-b00b-182b8aac6c24",
+          "referenceType": "BlackDuck-Version"
+        }
+      ],
+      "filesAnalyzed": false,
+      "licenseConcluded": "(Apache-2.0)",
+      "licenseDeclared": "(Apache-2.0)",
+      "name": "imx-lane-detection",
+      "originator": "Organization: imx-lane-detection",
+      "supplier": "Organization: NXP",
+      "versionInfo": "v1.0_release_L6.6.23_2.0.0"
+    },
+    {
+      "SPDXID": "SPDXRef-package-7b021e62-0d48-45b8-b00b-182b8aac6c24---33ae74a2-9b09-4328-a76b-87fb6003d46b",
+      "downloadLocation": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:github/iwatake2222/play_with_tflite@c2f91d64d7454a3da31e224286ca2106a61697dd",
+          "referenceType": "purl"
+        },
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "3add14ed-a485-499d-9d95-7e1b81b27c80",
+          "referenceType": "BlackDuck-ComponentOrigin"
+        },
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "33ae74a2-9b09-4328-a76b-87fb6003d46b",
+          "referenceType": "BlackDuck-ComponentVersion"
+        },
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "9092873f-8343-401e-b679-04e2eecbead9",
+          "referenceType": "BlackDuck-Component"
+        }
+      ],
+      "filesAnalyzed": false,
+      "homepage": "https://github.com/iwatake2222/play_with_tflite",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "name": "iwatake2222/play_with_tflite",
+      "originator": "Organization: iwatake2222",
+      "supplier": "Organization: iwatake2222",
+      "versionInfo": "20220718-snapshot-c2f91d64"
+    }
+  ],
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-DOCUMENT",
+      "relationshipType": "DESCRIBES",
+      "relatedSpdxElement": "SPDXRef-package-7b021e62-0d48-45b8-b00b-182b8aac6c24"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-7b021e62-0d48-45b8-b00b-182b8aac6c24",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-package-7b021e62-0d48-45b8-b00b-182b8aac6c24---33ae74a2-9b09-4328-a76b-87fb6003d46b"
+    }
+  ]
+}
